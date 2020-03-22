@@ -1,0 +1,56 @@
+PATH
+  remote: .
+  specs:
+    mobiledoc (0.0.0)
+
+GEM
+  remote: https://rubygems.org/
+  specs:
+    ansi (1.5.0)
+    ast (2.4.0)
+    builder (3.2.4)
+    coderay (1.1.2)
+    jaro_winkler (1.5.4)
+    method_source (1.0.0)
+    minitest (5.10.3)
+    minitest-reporters (1.4.2)
+      ansi
+      builder
+      minitest (>= 5.0)
+      ruby-progressbar
+    parallel (1.19.1)
+    parser (2.7.0.5)
+      ast (~> 2.4.0)
+    pry (0.13.0)
+      coderay (~> 1.1)
+      method_source (~> 1.0)
+    rainbow (3.0.0)
+    rake (13.0.1)
+    rexml (3.2.4)
+    rubocop (0.80.1)
+      jaro_winkler (~> 1.5.1)
+      parallel (~> 1.10)
+      parser (>= 2.7.0.1)
+      rainbow (>= 2.2.2, < 4.0)
+      rexml
+      ruby-progressbar (~> 1.7)
+      unicode-display_width (>= 1.4.0, < 1.7)
+    rubocop-performance (1.5.2)
+      rubocop (>= 0.71.0)
+    ruby-progressbar (1.10.1)
+    unicode-display_width (1.6.1)
+
+PLATFORMS
+  ruby
+
+DEPENDENCIES
+  minitest (~> 5.10.3)
+  minitest-reporters
+  mobiledoc!
+  pry
+  rake
+  rubocop
+  rubocop-performance
+
+BUNDLED WITH
+   1.17.1
