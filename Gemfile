@@ -21,3 +21,7 @@ gem 'pry', group: %i[development test]
 
 gem 'minitest', '~> 5.10.3', group: :test
 gem 'minitest-reporters', group: :test
+
+gem 'rb-readline', group: %i[development test]
+gem 'guard', group: %i[development test]
+gem 'guard-minitest', group: %i[development test]
