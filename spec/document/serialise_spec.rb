@@ -28,24 +28,43 @@ describe Document, 'serialise' do
   end
 
   describe 'sections' do
-    subject { Document.new }
+    let(:sections) { [] }
+    subject { Document.new(sections: sections).serialise }
 
-    it 'lists sections in order' do
-      subject.sections = [
+    describe 'order' do
+      let(:sections) { [
         Section::Text.new('one'),
         Section::Text.new('two'),
         Section::Text.new('three')
-      ]
-      doc = subject.serialise
+      ] }
 
-      doc[:sections].must_equal [
-        [1, :p, [0, [], 0, 'one']],
-        [1, :p, [0, [], 0, 'two']],
-        [1, :p, [0, [], 0, 'three']]
-      ]
+      it 'lists sections' do
+        doc = subject
+
+        doc[:sections].must_equal [
+          [1, :p, [0, [], 0, 'one']],
+          [1, :p, [0, [], 0, 'two']],
+          [1, :p, [0, [], 0, 'three']]
+        ]
+      end
     end
 
     describe 'text' do
+      let(:sections) { [
+        Section::Text.new('one', tag: :p),
+        Section::Text.new('two', tag: :h1),
+        Section::Text.new('three', tag: :h2)
+      ] }
+
+      it 'outputs the text section tags' do
+        doc = subject
+
+        doc[:sections].must_equal [
+          [1, :p, [0, [], 0, 'one']],
+          [1, :h1, [0, [], 0, 'two']],
+          [1, :h2, [0, [], 0, 'three']]
+        ]
+      end
     end
 
     describe 'list' do

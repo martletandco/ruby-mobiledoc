@@ -1,11 +1,14 @@
 module Mobiledoc::Section
   class Text
-    def initialize(text = '')
+    attr_accessor :tag
+
+    def initialize(text = '', options = {})
       self.text = text
+      self.tag = options[:tag] || :p
     end
 
     def serialise
-      [1, :p, [0, [], 0, text]]
+      [1, tag, [0, [], 0, text]]
     end
 
     private
