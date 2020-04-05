@@ -42,9 +42,9 @@ describe Document, 'serialise' do
         doc = subject
 
         doc[:sections].must_equal [
-          [1, :p, [0, [], 0, 'one']],
-          [1, :p, [0, [], 0, 'two']],
-          [1, :p, [0, [], 0, 'three']]
+          [1, :p, [[0, [], 0, 'one']]],
+          [1, :p, [[0, [], 0, 'two']]],
+          [1, :p, [[0, [], 0, 'three']]]
         ]
       end
     end
@@ -60,17 +60,37 @@ describe Document, 'serialise' do
         doc = subject
 
         doc[:sections].must_equal [
-          [1, :p, [0, [], 0, 'one']],
-          [1, :h1, [0, [], 0, 'two']],
-          [1, :h2, [0, [], 0, 'three']]
+          [1, :p, [[0, [], 0, 'one']]],
+          [1, :h1, [[0, [], 0, 'two']]],
+          [1, :h2, [[0, [], 0, 'three']]]
         ]
       end
     end
 
+    describe 'image' do
+      # @todo
+    end
+
     describe 'list' do
+      let(:sections) { [
+        Section::List.new(['zero'], tag: :ul),
+        Section::List.new(['one', 'two'], tag: :ul),
+        Section::List.new(['three'], tag: :ol)
+      ] }
+
+      it 'outputs the list section tags' do
+        doc = subject
+
+        doc[:sections].must_equal [
+          [3, :ul, [[[0, [], 0, 'zero']]]],
+          [3, :ul, [[[0, [], 0, 'one']], [[0, [], 0, 'two']]]],
+          [3, :ol, [[[0, [], 0, 'three']]]]
+        ]
+      end
     end
 
     describe 'card' do
+      # @todo
     end
   end
 end
