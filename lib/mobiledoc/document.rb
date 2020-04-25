@@ -11,7 +11,7 @@ module Mobiledoc
     def serialise(version = VERSION)
       {
         version: VERSION,
-        markups: [],
+        markups: serialised_markups,
         atoms: [],
         cards: [],
         sections: serialised_sections
@@ -20,7 +20,17 @@ module Mobiledoc
 
     private
 
+    def serialised_markups
+      # Make a super set of all markups
+      sections
+        .map(&:markups)
+        .reduce(Set.new) { |acc, set| acc | set }
+        .to_a
+        .map { |markup| [markup.tag_name] }
+    end
+
     def serialised_sections
+      # @incomplete: need to capture markups (and atoms eventuall) that used by sections
       sections.map(&:serialise) 
     end
   end

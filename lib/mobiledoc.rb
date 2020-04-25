@@ -1,5 +1,7 @@
 require 'mobiledoc/document'
-require 'mobiledoc/section'
+require 'mobiledoc/markup'
+require 'mobiledoc/sections/text'
+require 'mobiledoc/sections/list'
 
 module Mobiledoc
 end

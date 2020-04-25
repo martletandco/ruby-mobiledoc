@@ -1,6 +1,8 @@
 module Mobiledoc::Markup
   class Bold
-    tag_name = 'b'
+    def self.tag_name
+      'b'
+    end
   end
 
   # a - Hypertext link
