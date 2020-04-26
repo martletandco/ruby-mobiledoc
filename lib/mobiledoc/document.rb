@@ -18,20 +18,26 @@ module Mobiledoc
       }
     end
 
-    private
-
-    def serialised_markups
+    def markups
       # Make a super set of all markups
       sections
         .map(&:markups)
         .reduce(Set.new) { |acc, set| acc | set }
-        .to_a
-        .map { |markup| [markup.tag_name] }
+    end
+
+    private
+
+    def ordered_markups
+      markups.to_a.sort_by { |markup| markup.tag_name }
+    end
+
+    def serialised_markups
+        ordered_markups
+        .map(&:serialise)
     end
 
     def serialised_sections
-      # @incomplete: need to capture markups (and atoms eventuall) that used by sections
-      sections.map(&:serialise) 
+      sections.map {|section| section.serialise(ordered_markups) }
     end
   end
 end

@@ -11,7 +11,7 @@ module Mobiledoc::Section
       Set.new
     end
 
-    def serialise
+    def serialise(ordered_markups)
       serialised_lines = texts.map { |text| [[0, [], 0, text]] }
 
       [3, tag, serialised_lines]

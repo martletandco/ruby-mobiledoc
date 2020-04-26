@@ -111,27 +111,66 @@ describe Document, 'serialise' do
     describe 'in text section' do
       let(:segments_one) { [] }
       let(:section_one) do
-        s = Section::Text.new
-        segments_one.each { |segment| s.append(*segment) }
-        s
-        # @enhance: support init block as tidier API
-        # Section::Text.new do |s|
-        #   segments_one.each { |segment| s.append(*segment) }
-        # end
+        Section::Text.new.tap do |s|
+          segments_one.each { |segment| s.append(*segment) }
+        end
       end
       subject { Document.new(sections: [section_one]).serialise }
 
-      describe 'bold' do
+      describe 'with no options' do
         let(:segments_one) { [['Name in bold', [Markup::Bold]]] }
 
         it 'wraps text' do
           doc = subject
           doc[:markups].must_equal [['b']]
           doc[:sections][0][2].must_equal [
-            [0, [0], 0, 'Name in bold']
+            [0, [0], 1, 'Name in bold']
           ]
           doc[:atoms].must_equal []
           doc[:cards].must_equal []
+        end
+      end
+
+      describe 'with options' do
+        let(:segments_one) { [['Name in link', [Markup::Anchor.new('https://tok.yo')]]] }
+
+        it 'wraps text' do
+          doc = subject
+          doc[:markups].must_equal [['a', 'https://tok.yo']]
+          doc[:sections][0][2].must_equal [
+            [0, [0], 1, 'Name in link']
+          ]
+          doc[:atoms].must_equal []
+          doc[:cards].must_equal []
+        end
+      end
+
+      describe 'multiple' do
+        describe 'not nested' do
+          let(:segments_one) { [
+            ['underline', [Markup::Underline]],
+            [' '],
+            ['bold', [Markup::Bold]],
+            [' '],
+            ['underline again', [Markup::Underline]]
+          ]}
+
+          it 'referres to the correct index' do
+            doc = subject
+            doc[:markups].must_equal [
+              ['b'],
+              ['u']
+            ]
+            doc[:sections][0][2].must_equal [
+              [0, [1], 1, 'underline'],
+              [0, [], 0, ' '],
+              [0, [0], 1, 'bold'],
+              [0, [], 0, ' '],
+              [0, [1], 1, 'underline again']
+            ]
+            doc[:atoms].must_equal []
+            doc[:cards].must_equal []
+          end
         end
       end
     end
