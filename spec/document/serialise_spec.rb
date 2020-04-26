@@ -172,7 +172,63 @@ describe Document, 'serialise' do
             doc[:cards].must_equal []
           end
         end
+
+        describe 'nested' do
+          let(:segments_one) { [
+            ['underline and bold', [Markup::Underline, Markup::Bold]],
+            [' '],
+            ['bold and underline', [Markup::Bold, Markup::Underline]],
+            ['.']
+          ]}
+
+          it 'referres to the correct index' do
+            doc = subject
+            doc[:markups].must_equal [
+              ['b'],
+              ['u']
+            ]
+            doc[:sections][0][2].must_equal [
+              [0, [1, 0], 2, 'underline and bold'],
+              [0, [], 0, ' '],
+              [0, [0, 1], 2, 'bold and underline'],
+              [0, [], 0, '.']
+            ]
+            doc[:atoms].must_equal []
+            doc[:cards].must_equal []
+          end
+        end
+
+        describe 'partially overlapping' do
+          let(:segments_one) { [
+            ['underline', [Markup::Underline]],
+            [' ', [Markup::Underline]],
+            ['bold and underline', [Markup::Bold, Markup::Underline]],
+            ['.', [Markup::Underline]]
+          ]}
+
+          it 'referres to the correct index' do
+            doc = subject
+            doc[:markups].must_equal [
+              ['b'],
+              ['u']
+            ]
+            doc[:sections][0][2].must_equal [
+              [0, [1], 0, 'underline'],
+              [0, [], 0, ' '],
+              [0, [0], 1, 'bold and underline'],
+              [0, [], 1, '.']
+            ]
+            doc[:atoms].must_equal []
+            doc[:cards].must_equal []
+          end
+        end
       end
     end
+
+    # list
+    # - same as text
+
+    # mixed sections
+    # - mostly that markups are still referenced correctly
   end
 end
