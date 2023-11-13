@@ -15,5 +15,5 @@ Gem::Specification.new do |s|
 
   s.files = Dir['{lib}/**/*', 'MIT-LICENSE', 'Rakefile', 'README.md']
 
-  s.required_ruby_version = '~> 2.5'
+  s.required_ruby_version = '~> 3.2'
 end
