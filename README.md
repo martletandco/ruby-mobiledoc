@@ -6,6 +6,9 @@ _Author's note: There is a tendency, when considering using Mobiledoc, to be con
 
 ## Initial goals
 
+- Document builder API
+- Document seralise to MobileDoc format
+- Parse MobileDoc format to document
 - Render documents to HTML, email, text
 - Parse HTML to document
 
