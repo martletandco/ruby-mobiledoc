@@ -280,9 +280,9 @@ describe Document, 'serialise' do
               ['u']
             ]
             doc[:sections][0][2].must_equal [
-              [0, [1], 1, 'underline'],
-              [0, [0, 1], 1, ' now with strike through'],
-              [0, [], 1, ' but no more underline'],
+              [0, [1], 0, 'underline'],
+              [0, [0], 2, ' now with strike through,'],
+              [0, [0], 1, ' but no more underline'],
             ]
             doc[:atoms].must_equal []
             doc[:cards].must_equal []
@@ -305,10 +305,10 @@ describe Document, 'serialise' do
               ['u']
             ]
             doc[:sections][0][2].must_equal [
-              [0, [2], 0, 'underline'],
-              [0, [0], 2, 'bold and underline'],
-              [0, [0, 2], 1, 'bold and strike'],
-              [0, [], 1, 'strike']
+              [0, [2], 1, 'underline'],
+              [0, [0, 2], 1, 'bold and underline'],
+              [0, [1], 2, 'bold and strike'],
+              [0, [1], 1, 'strike']
             ]
             doc[:atoms].must_equal []
             doc[:cards].must_equal []
@@ -340,14 +340,14 @@ describe Document, 'serialise' do
               ['u']
             ]
             doc[:sections][0][2].must_equal [
-              [0, [0], 1, 'ONE '],
-              [0, [1, 0], 1, '_TWO'],
-              [0, [], 1, ' three_']
+              [0, [0], 0, 'ONE '],
+              [0, [1], 2, '_TWO'],
+              [0, [1], 1, ' three_']
             ]
             doc[:sections][1][2].must_equal [
-              [0, [0], 0, 'FOUR '],
-              [0, [1], 2, '_FIVE'],
-              [0, [1], 1, ' six_']
+              [0, [0], 1, 'FOUR '],
+              [0, [1, 0], 1, '_FIVE'],
+              [0, [], 1, ' six_']
             ]
             doc[:atoms].must_equal []
             doc[:cards].must_equal []
