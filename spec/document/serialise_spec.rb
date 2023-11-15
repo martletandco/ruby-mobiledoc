@@ -322,9 +322,9 @@ describe Document, 'serialise' do
             [' three_', [Markup::Underline]]
           ]}
           let(:segments_two) {[
-            ['ONE ', [Markup::Bold]],
-            ['_TWO', [Markup::Underline, Markup::Bold]],
-            [' three_', [Markup::Underline]]
+            ['FOUR ', [Markup::Bold]],
+            ['_FIVE', [Markup::Underline, Markup::Bold]],
+            [' six_', [Markup::Underline]]
           ]}
           let(:section_two) do
             Section::Text.new.tap do |s|
@@ -340,14 +340,14 @@ describe Document, 'serialise' do
               ['u']
             ]
             doc[:sections][0][2].must_equal [
-              [0, [0], 0, 'ONE '],
-              [0, [1], 2, '_TWO'],
-              [0, [1], 1, ' three_']
-            ]
-            doc[:sections][1][2].must_equal [
               [0, [0], 1, 'ONE '],
               [0, [1, 0], 1, '_TWO'],
               [0, [], 1, ' three_']
+            ]
+            doc[:sections][1][2].must_equal [
+              [0, [0], 0, 'FOUR '],
+              [0, [1], 2, '_FIVE'],
+              [0, [1], 1, ' six_']
             ]
             doc[:atoms].must_equal []
             doc[:cards].must_equal []
