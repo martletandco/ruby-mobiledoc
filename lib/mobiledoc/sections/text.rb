@@ -14,17 +14,17 @@ module Mobiledoc::Section
     # will be. Once this supports edits, the application on markups there will
     # also have an impact on marker placement
     def append(text, markups = [])
-      we want to hold a list of ranges here, so we can support edits later, but
-      also because it makes serialisation easier too
+      # we want to hold a list of ranges here, so we can support edits later, but
+      # also because it makes serialisation easier too
 
-      Might need to find and join ranges which match markups. Need to decide 
-      what the semanics are here re appending. Might be different to applying
-      to a range. Perhaps we should rejig the order to better line up with existing markups?
+      # Might need to find and join ranges which match markups. Need to decide 
+      # what the semanics are here re appending. Might be different to applying
+      # to a range. Perhaps we should rejig the order to better line up with existing markups?
 
-      Is appending: adding text then applying markups to that range? A shorthand
+      # Is appending: adding text then applying markups to that range? A shorthand
 
-      OR perhaps this API is different from an 'editor' as it is programatic, rather than a UI?
-      So there _could_ be a "natural" order to the way markers are built
+      # OR perhaps this API is different from an 'editor' as it is programatic, rather than a UI?
+      # So there _could_ be a "natural" order to the way markers are built
       segments << [text, markups] unless text.nil?
     end
 
