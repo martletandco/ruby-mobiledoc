@@ -14,3 +14,12 @@ _Author's note: There is a tendency, when considering using Mobiledoc, to be con
 - Building documents programatically
 - Manipulation of documents, including markups and atoms
 
+## Development
+
+### Installation
+
+(With Ruby 3.2.x and `bundler` installed) run `bundler install`
+
+### Tests
+
+Run `rake test`
