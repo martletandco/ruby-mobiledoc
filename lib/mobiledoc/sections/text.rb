@@ -1,4 +1,14 @@
 module Mobiledoc::Section
+
+  class Segment
+    attr_accessor :text, :markups
+
+    def initialize(text, markups = [])
+      @text = text
+      @markups = markups.uniq
+    end
+  end
+
   class Text
     attr_accessor :tag
 
@@ -25,11 +35,11 @@ module Mobiledoc::Section
 
       # OR perhaps this API is different from an 'editor' as it is programatic, rather than a UI?
       # So there _could_ be a "natural" order to the way markers are built
-      segments << [text, markups] unless text.nil?
+      segments << Segment.new(text, markups) unless text.nil?
     end
 
     def markups
-      Set.new segments.map { |segment| segment.last }.flatten
+      Set.new segments.map { |segment| segment.markups }.flatten
     end
 
     def serialise(ordered_markups)
@@ -50,10 +60,10 @@ module Mobiledoc::Section
         current_segment = segments[index]
         next_segment = segments[index + 1]
 
-        text = current_segment.first
-        current_markups = current_segment.last.uniq
+        text = current_segment.text
+        current_markups = current_segment.markups
         # @incomplete: I think we need to either run this loop backwards or run two passes (maybe a longest chain sorting)
-        next_markups = next_segment&.last&.uniq || []
+        next_markups = next_segment&.markups || []
 
         # Ensure we only open markups that aren't already open
         markups_to_open = current_markups - open_markups
