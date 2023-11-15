@@ -27,6 +27,7 @@ module Mobiledoc
 
     private
 
+    # Ordering the markups means we have a stable output
     def ordered_markups
       markups.to_a.sort_by { |markup| markup.tag_name }
     end

@@ -198,12 +198,12 @@ describe Document, 'serialise' do
           end
         end
 
-        describe 'partially overlapping' do
+        describe 'overlapping middle' do
           let(:segments_one) { [
             ['underline', [Markup::Underline]],
             [' ', [Markup::Underline]],
-            ['bold and underline', [Markup::Bold, Markup::Underline]],
-            ['.', [Markup::Underline]]
+            ['bold and underline', [Markup::Underline, Markup::Bold]],
+            ['.', [Markup::Underline]],
           ]}
 
           it 'referres to the correct index' do
@@ -216,7 +216,138 @@ describe Document, 'serialise' do
               [0, [1], 0, 'underline'],
               [0, [], 0, ' '],
               [0, [0], 1, 'bold and underline'],
-              [0, [], 1, '.']
+              [0, [], 1, '.'],
+            ]
+            doc[:atoms].must_equal []
+            doc[:cards].must_equal []
+          end
+        end
+
+        describe 'overlapping start' do
+          let(:segments_one) { [
+            ['underline and bold,', [Markup::Underline, Markup::Bold]],
+            [' just underline', [Markup::Underline]]
+          ]}
+
+          it 'referres to the correct index' do
+            doc = subject
+            # @incomplete: this order looks reversed
+            doc[:markups].must_equal [
+              ['b'],
+              ['u']
+            ]
+            doc[:sections][0][2].must_equal [
+              [0, [1, 0], 1, 'underline and bold,'],
+              [0, [], 1, ' just underline'],
+            ]
+            doc[:atoms].must_equal []
+            doc[:cards].must_equal []
+          end
+        end
+
+        describe 'overlapping end' do
+          let(:segments_one) { [
+            ['just underline,', [Markup::Underline]],
+            [' underline and bold,', [Markup::Underline, Markup::Bold]]
+          ]}
+
+          it 'referres to the correct index' do
+            doc = subject
+            doc[:markups].must_equal [
+              ['b'],
+              ['u']
+            ]
+            doc[:sections][0][2].must_equal [
+              [0, [1], 0, 'just underline,'],
+              [0, [0], 2, ' underline and bold,'],
+            ]
+            doc[:atoms].must_equal []
+            doc[:cards].must_equal []
+          end
+        end
+
+        describe 'partially overlapping' do
+          let(:segments_one) { [
+            ['underline', [Markup::Underline]],
+            [' now with strike through,', [Markup::Underline, Markup::StrikeThrough]],
+            [' but no more underline', [Markup::StrikeThrough]]
+          ]}
+
+          it 'referres to the correct index' do
+            doc = subject
+            doc[:markups].must_equal [
+              ['s'],
+              ['u']
+            ]
+            doc[:sections][0][2].must_equal [
+              [0, [1], 0, 'underline'],
+              [0, [0], 2, ' now with strike through,'],
+              [0, [0], 1, ' but no more underline'],
+            ]
+            doc[:atoms].must_equal []
+            doc[:cards].must_equal []
+          end
+        end
+
+        describe 'overlapping two (straddle)' do
+          let(:segments_one) { [
+            ['underline', [Markup::Underline]],
+            ['bold and underline', [Markup::Bold, Markup::Underline]],
+            ['bold and strike', [Markup::Bold, Markup::StrikeThrough]],
+            ['strike', [Markup::StrikeThrough]]
+          ]}
+
+          it 'referres to the correct index' do
+            doc = subject
+            doc[:markups].must_equal [
+              ['b'],
+              ['s'],
+              ['u']
+            ]
+            doc[:sections][0][2].must_equal [
+              [0, [2], 1, 'underline'],
+              [0, [0, 2], 1, 'bold and underline'],
+              [0, [1], 2, 'bold and strike'],
+              [0, [1], 1, 'strike']
+            ]
+            doc[:atoms].must_equal []
+            doc[:cards].must_equal []
+          end
+        end
+
+        describe 'segment breaking is order dependent' do
+          let(:segments_one) {[
+            ['ONE ', [Markup::Bold]],
+            ['_TWO', [Markup::Bold, Markup::Underline]],
+            [' three_', [Markup::Underline]]
+          ]}
+          let(:segments_two) {[
+            ['FOUR ', [Markup::Bold]],
+            ['_FIVE', [Markup::Underline, Markup::Bold]],
+            [' six_', [Markup::Underline]]
+          ]}
+          let(:section_two) do
+            Section::Text.new.tap do |s|
+              segments_two.each { |segment| s.append(*segment) }
+            end
+          end
+          subject { Document.new(sections: [section_one, section_two]).serialise }
+
+          it 'referres to the correct index' do
+            doc = subject
+            doc[:markups].must_equal [
+              ['b'],
+              ['u']
+            ]
+            doc[:sections][0][2].must_equal [
+              [0, [0], 0, 'ONE '],
+              [0, [1], 2, '_TWO'],
+              [0, [1], 1, ' three_']
+            ]
+            doc[:sections][1][2].must_equal [
+              [0, [0], 1, 'FOUR '],
+              [0, [1, 0], 1, '_FIVE'],
+              [0, [], 1, ' six_']
             ]
             doc[:atoms].must_equal []
             doc[:cards].must_equal []
